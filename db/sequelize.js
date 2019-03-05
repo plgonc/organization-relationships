@@ -27,47 +27,79 @@ Relation.getLevel = (org_name) => {
 
 Relation.getRelations = async (org_name) => {
     var results = []
-    var parents = []
 
     // parents
-    await Relation.findAll({
+    const parents = await getParents(org_name)
+    results = results.concat(parents)
+
+    // daughters
+    const daughters = await getDaughters(org_name)
+    results = results.concat(daughters)
+
+    // sisters
+    var parentsSearch = parents.map(parent => parent.org_name)
+    const sisters = await getSisters(org_name, parentsSearch)
+    results = results.concat(sisters)
+
+    return results
+}
+
+var getParents = async(org_name) => {
+    const parentsModel = await Relation.findAll({
         raw: true,
         where: {
             source: org_name
-        }, attributes: ['parent']
-    }).then(list => {
-        var parentsModel = list.map(parent => ({ relationship_type: "parent", org_name: parent.parent }))
-        results = results.concat(parentsModel)
-
-        parents = parentsModel.map(parent => parent.org_name)
+        }, attributes: [
+            'parent'
+        ]
     })
 
-    // daughters
-    await Relation.findAll({
+    const parents = parentsModel.map(parent => ({
+        relationship_type: "parent", 
+        org_name: parent.parent }
+    ))
+
+    return parents
+}
+
+var getDaughters = async(org_name) => {
+    const daughtersModel = await Relation.findAll({
         raw: true,
         where: {
             parent: org_name
-        }, attributes: ['source']
-    }).then(list => {
-        var daughters = list.map(daughter => ({ relationship_type: "daughter", org_name: daughter.source }))
-        results = results.concat(daughters)
+        }, attributes: [
+            'source'
+        ]
     })
 
-    // sisters
-    await Relation.getLevel(org_name).then(async (level) => {
-        await Relation.findAll({
-            raw: true,
-            where: {
-                parent: parents,
-                level: level
-            }, attributes: [Sequelize.fn('DISTINCT', Sequelize.col('source')), 'source']
-        }).then(list => {
-            var sisters = list.map(sister => ({ relationship_type: "sister", org_name: sister.source }))
-            results = results.concat(sisters)
-        })
+    const daughters = daughtersModel.map(daughter => ({ 
+        relationship_type: "daughter", 
+        org_name: daughter.source }
+    ))
+
+    return daughters
+}
+
+var getSisters = async (org_name, parents) => {
+    const level = await Relation.getLevel(org_name)
+    const list = await Relation.findAll({
+        raw: true,
+        where: {
+            parent: parents,
+            level: level
+        }, 
+        attributes: [
+            Sequelize.fn('DISTINCT', Sequelize.col('source')),
+            'source'
+        ]
     })
 
-    return results
+    const sisters = list.map(sister => ({ 
+        relationship_type: "sister", 
+        org_name: sister.source }
+    ))
+
+    return sisters
 }
 
 sequelize.sync({ force: false })
