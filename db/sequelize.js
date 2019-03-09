@@ -44,7 +44,15 @@ Relation.createSisterRelationships = async(org_name, parent) => {
     })
 }
 
-Relation.getRelations = async(org_name) => {
+Relation.getRelations = async(org_name, page, page_size) => {
+    if (page === undefined) 
+        page = 1
+    
+    if (page_size > 100 || page_size === undefined)
+        page_size = 100
+        
+	var offset = page_size * (page - 1);
+
     const relations = await Relation.findAll({
         raw: true,
         where: {
@@ -54,6 +62,8 @@ Relation.getRelations = async(org_name) => {
             ['related', 'org_name'], 
             'relationship_type'
         ],
+        limit: parseInt(page_size),
+        offset: offset,
         order: [
             ['related', 'ASC']
         ]

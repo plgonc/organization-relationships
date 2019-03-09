@@ -28,8 +28,8 @@ var handle_sisters_relations = async(source, parent) => {
     await Relation.createSisterRelationships(source, parent)
 }
 
-var get_relations_for_organization = async (org_name) => {
-    const relations = await Relation.getRelations(org_name)
+var get_relations_for_organization = async (org_name, page, page_size) => {
+    const relations = await Relation.getRelations(org_name, page, page_size)
 
     return relations
 }

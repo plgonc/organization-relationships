@@ -8,5 +8,10 @@ module.exports = (sequelize, type) => {
         source: type.STRING,
         related: type.STRING,
         relationship_type: type.STRING
+    }, {
+        indexes: [{
+            name: 'source_index',
+            fields: ['source']
+        }]    
     })
 }

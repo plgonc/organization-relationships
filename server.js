@@ -14,10 +14,11 @@ app.post('/api/relations', (req, res) => {
     res.send()
 })
 
-app.get('/api/relations', (req, res) => {
-    relationsController.get_relations_for_organization(req.query.org_name).then((relations) => {
-        res.send(relations)
-    })
+app.get('/api/relations/:org_name', (req, res) => {
+    relationsController.get_relations_for_organization(req.params.org_name, req.query.page, req.query.page_size)
+        .then((relations) => {
+            res.send(relations)
+        })
 })
 
 app.listen(port, () => {
