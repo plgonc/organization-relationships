@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
 
 app.post('/api/relations', (req, res) => {
-    relationsController.handle_relations(req.body, null, 0)
+    relationsController.handle_relations(req.body, null)
     res.send()
 })
 

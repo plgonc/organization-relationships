@@ -6,12 +6,7 @@ module.exports = (sequelize, type) => {
             autoIncrement: true
         },
         source: type.STRING,
-        parent: type.STRING,
-        level: type.INTEGER
-    }, {
-        indexes: [{
-            name: 'parent_level',
-            fields: ['parent', 'level']
-        }]    
+        related: type.STRING,
+        relationship_type: type.STRING
     })
 }
