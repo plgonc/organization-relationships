@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 const RelationModel = require('./../models/relation')
 
 const sequelize = new Sequelize('organizations', 'root', 'admin', {
-    host: 'localhost',
+    host: 'db',
     dialect: 'mysql',
     pool: {
         max: 10,

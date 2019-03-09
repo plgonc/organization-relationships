@@ -10,8 +10,15 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
 
 app.post('/api/relations', (req, res) => {
-    relationsController.handle_relations(req.body, null)
-    res.send()
+    relationsController.create_relations(req.body, null)
+        .then((result) => {
+            res.send()
+        }).catch((err) => {
+            res.status(500).json({
+                type: 'error', 
+                message: `something went wrong. ${err.message}`
+              })
+        });
 })
 
 app.get('/api/relations/:org_name', (req, res) => {

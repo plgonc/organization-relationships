@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:latest  
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+    ports:   
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: 'organizations'
+      MYSQL_ROOT_PASSWORD: 'admin'
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    command: npm run start
+    volumes:
+      - ./src:/home/node/app/src
+    depends_on:
+      - db
+    links:
+      - db
+    ports:
+      - 3000:3000
+    environment:
+      WAIT_HOSTS: db:3306
+volumes:
+  db-data:
+    driver: local
