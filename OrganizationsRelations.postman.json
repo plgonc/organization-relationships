@@ -1,0 +1,93 @@
+{
+	"info": {
+		"_postman_id": "262a932d-e20f-4c54-93f4-e77e5ff9f260",
+		"name": "OrganizationsRelations",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST RELATIONS",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"disabled": false
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"org_name\": \"beta\",\n    \"daughters\": [\n        {\n            \"org_name\": \"alfa\",\n            \"daughters\": [\n                {\n                    \"org_name\": \"gama\"\n                },\n                {\n                    \"org_name\": \"delta\"\n                },\n                {\n                    \"org_name\": \"evian\",\n                    \"daughters\": [\n                        {\n                            \"org_name\": \"charlie\"\n                        }\n                    ]\n                }\n            ]\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/relations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"relations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET RELATIONS",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "page",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "page_size",
+							"value": "10",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/relations/evian?",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"relations",
+						"evian"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "page_size",
+							"value": "3",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
