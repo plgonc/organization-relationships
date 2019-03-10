@@ -24,7 +24,8 @@ services:
     ports:
       - 3000:3000
     environment:
-      WAIT_HOSTS: db:3306
+      - WAIT_HOSTS=db:3306
+      - NODE_ENV=docker
 volumes:
   db-data:
     driver: local

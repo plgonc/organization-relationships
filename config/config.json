@@ -8,5 +8,8 @@
     },
     "test": {
         "database": "testing"
+    },
+    "docker": {
+        "db_host": "db"
     }
 }
