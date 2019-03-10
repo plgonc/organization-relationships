@@ -1,6 +1,6 @@
 const { Relation } = require('./../db/sequelize')
 
-var create_relations = async(org, parent_name) => {
+var create_relations = async (org, parent_name = null) => {
     const organization = await Relation.findOne({ 
         where: {
             source: org.org_name
@@ -13,7 +13,7 @@ var create_relations = async(org, parent_name) => {
         handle_relations(org, parent_name)
 }
 
-var handle_relations = async(org, parent_name) => {
+var handle_relations = async (org, parent_name) => {
     try {
         if (org.daughters) {
             org.daughters.forEach(daughter => {
@@ -27,7 +27,7 @@ var handle_relations = async(org, parent_name) => {
     }
 }
 
-var handle_parent_daughter_relations = async(source, parent) => {
+var handle_parent_daughter_relations = async (source, parent) => {
     try {
         var relations = [{
             source: source,
@@ -38,15 +38,15 @@ var handle_parent_daughter_relations = async(source, parent) => {
             related: source,
             relationship_type: "daughter"
         }]
-        await Relation.createRelationships(relations)
+        await Relation.create_relationships(relations)
     } catch (error) {
         throw error
     }
 }
 
-var handle_sisters_relations = async(source, parent) => {
+var handle_sisters_relations = async (source, parent) => {
     try {
-        await Relation.createSisterRelationships(source, parent)
+        await Relation.create_sister_relationships(source, parent)
     } catch (error) {
         throw error
     }
@@ -54,7 +54,7 @@ var handle_sisters_relations = async(source, parent) => {
 
 var get_relations_for_organization = async (org_name, page, page_size) => {
     try {
-        const relations = await Relation.getRelations(org_name, page, page_size)
+        const relations = await Relation.get_relations(org_name, page, page_size)
         return relations
     } catch (error) {
         throw error

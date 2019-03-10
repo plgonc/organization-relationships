@@ -16,7 +16,6 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
-    command: npm run start
     volumes:
       - ./src:/home/node/app/src
     depends_on:

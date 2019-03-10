@@ -14,11 +14,11 @@ const sequelize = new Sequelize('organizations', 'root', 'admin', {
 
 const Relation = RelationModel(sequelize, Sequelize)
 
-Relation.createRelationships = async(relationships) => {
+Relation.create_relationships = async (relationships) => {
     Relation.bulkCreate(relationships)
 }
 
-Relation.createSisterRelationships = async(org_name, parent) => {
+Relation.create_sister_relationships = async (org_name, parent) => {
     const sisters = await Relation.findAll({
         raw: true,
         where: {
@@ -44,14 +44,8 @@ Relation.createSisterRelationships = async(org_name, parent) => {
     })
 }
 
-Relation.getRelations = async(org_name, page, page_size) => {
-    if (page === undefined) 
-        page = 1
-    
-    if (page_size > 100 || page_size === undefined)
-        page_size = 100
-        
-	var offset = page_size * (page - 1);
+Relation.get_relations = async (org_name, page = 1, page_size = 100) => {
+	var offset = page_size * (page - 1)
 
     const relations = await Relation.findAll({
         raw: true,
@@ -77,4 +71,4 @@ sequelize.sync({ force: false })
         console.log(`Database & tables created!`)
     })
 
-module.exports = { Relation, Sequelize }
+module.exports = { Relation }
