@@ -1,0 +1,12 @@
+{
+    "dev": {
+        "port": 3000,
+        "db_host": "localhost",
+        "database": "organizations",
+        "db_user": "root",
+        "db_password": "admin"
+    },
+    "test": {
+        "database": "testing"
+    }
+}

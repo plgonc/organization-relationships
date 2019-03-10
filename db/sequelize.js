@@ -1,28 +1,25 @@
 const Sequelize = require('sequelize')
 const RelationModel = require('./../models/relation')
 
-const sequelize = new Sequelize('organizations', 'root', 'admin', {
-    host: 'db',
+const sequelize = new Sequelize(global.gConfig.database, global.gConfig.db_user, global.gConfig.db_password, {
+    host: global.gConfig.db_host,
     dialect: 'mysql',
     pool: {
         max: 10,
         min: 0,
         acquire: 30000,
         idle: 10000
-    }
+    },
+    logging: false
 })
 
 const Relation = RelationModel(sequelize, Sequelize)
 
-Relation.create_relationships = async (relationships) => {
-    Relation.bulkCreate(relationships)
-}
-
-Relation.create_sister_relationships = async (org_name, parent) => {
+Relation.createSisterRelationships = async (orgName, parent) => {
     const sisters = await Relation.findAll({
         raw: true,
         where: {
-            source: { $not: org_name},
+            source: { $not: orgName},
             related: parent,
             relationship_type: "parent"
         }
@@ -31,12 +28,12 @@ Relation.create_sister_relationships = async (org_name, parent) => {
     sisters.forEach(relationship => {
         Relation.findOrCreate({
             where: {
-                source: org_name,
+                source: orgName,
                 related: relationship.source,
                 relationship_type: "sister"
             },
             defaults: {
-                source: org_name,
+                source: orgName,
                 related: relationship.source,
                 relationship_type: "sister"
             }
@@ -44,19 +41,22 @@ Relation.create_sister_relationships = async (org_name, parent) => {
     })
 }
 
-Relation.get_relations = async (org_name, page = 1, page_size = 100) => {
-	var offset = page_size * (page - 1)
+Relation.getRelations = async (orgName, page = 1, pageSize = 100) => {
+	var offset = pageSize * (page - 1)
 
     const relations = await Relation.findAll({
         raw: true,
         where: {
-            source: org_name
+            source: orgName,
+            related: {
+                $ne: null
+            }
         },
         attributes: [
-            ['related', 'org_name'], 
+            [sequelize.fn('DISTINCT', sequelize.col('related')), 'org_name'], 
             'relationship_type'
         ],
-        limit: parseInt(page_size),
+        limit: parseInt(pageSize),
         offset: offset,
         order: [
             ['related', 'ASC']
@@ -67,8 +67,6 @@ Relation.get_relations = async (org_name, page = 1, page_size = 100) => {
 }
 
 sequelize.sync({ force: false })
-    .then(() => {
-        console.log(`Database & tables created!`)
-    })
+    .then(() => {})
 
 module.exports = { Relation }
