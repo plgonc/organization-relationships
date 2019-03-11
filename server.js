@@ -18,9 +18,9 @@ app.post('/api/relations', (req, res) => {
         })
         .catch((err) => {
             res.status(500).json({
-                type: 'error', 
+                type: 'error',
                 message: `something went wrong. ${err.message}`
-              })
+            })
         })
 })
 

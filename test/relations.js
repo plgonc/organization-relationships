@@ -16,44 +16,44 @@ describe('/GET', () => {
         chai.request(server)
             .post('/api/relations/')
             .send(JSON.parse(fs.readFileSync('./test/post.json', 'utf8')))
-            .end((err, res) => {})
+            .end((err, res) => { })
         setTimeout(() => {
             done()
         }, 1000)
     });
 
     it('it should get all the relations for Black Banana', (done) => {
-      chai.request(server)
-          .get('/api/relations/' + 'Black Banana')
-          .end((err, res) => {
+        chai.request(server)
+            .get('/api/relations/' + 'Black Banana')
+            .end((err, res) => {
                 res.should.have.status(200)
                 res.body.should.be.a('array')
                 res.body.length.should.be.eql(6)
                 done()
-          })
+            })
     })
 
     it('it should get second page of relations for Black Banana', (done) => {
         chai.request(server)
             .get('/api/relations/' + 'Black Banana')
-            .query({page: 2, page_size: 3})
+            .query({ page: 2, page_size: 3 })
             .end((err, res) => {
-                  res.should.have.status(200)
-                  res.body.should.be.a('array')
-                  res.body.length.should.be.eql(3)
-                  done()
+                res.should.have.status(200)
+                res.body.should.be.a('array')
+                res.body.length.should.be.eql(3)
+                done()
             })
     })
 
     it('it should get empty array response for page 3 with size 3 for Black Banana', (done) => {
         chai.request(server)
             .get('/api/relations/' + 'Black Banana')
-            .query({page: 3, page_size: 3})
+            .query({ page: 3, page_size: 3 })
             .end((err, res) => {
-                  res.should.have.status(200)
-                  res.body.should.be.a('array')
-                  res.body.length.should.be.eql(0)
-                  done()
+                res.should.have.status(200)
+                res.body.should.be.a('array')
+                res.body.length.should.be.eql(0)
+                done()
             })
     })
 
@@ -61,13 +61,13 @@ describe('/GET', () => {
         chai.request(server)
             .get('/api/relations/' + 'Paradise Island')
             .end((err, res) => {
-                  res.should.have.status(200)
-                  res.body.should.be.a('array')
-                  res.body.length.should.be.eql(2)
-                  res.body.forEach((element) => {
+                res.should.have.status(200)
+                res.body.should.be.a('array')
+                res.body.length.should.be.eql(2)
+                res.body.forEach((element) => {
                     element.relationship_type.should.be.eql("daughter")
-                  })
-                  done()
+                })
+                done()
             })
     })
 })
@@ -83,20 +83,20 @@ describe('/POST', () => {
             .post('/api/relations/')
             .send(JSON.parse(fs.readFileSync('./test/post.json', 'utf8')))
             .end((err, res) => {
-                  res.should.have.status(200)
-              done()
+                res.should.have.status(200)
+                done()
             })
-    }) 
+    })
 
     it('it should reply with 500 status code when trying to create existing organization relations', (done) => {
         chai.request(server)
             .post('/api/relations/')
             .send(JSON.parse(fs.readFileSync('./test/post.json', 'utf8')))
             .end((err, res) => {
-                  res.should.have.status(200)
+                res.should.have.status(200)
             })
         setTimeout(() => {
-                chai.request(server)
+            chai.request(server)
                 .post('/api/relations/')
                 .send(JSON.parse(fs.readFileSync('./test/post.json', 'utf8')))
                 .end((err, res) => {
@@ -105,7 +105,7 @@ describe('/POST', () => {
                     res.body.type.should.be.eql('error')
                     res.body.message.should.be.eql('something went wrong. Relations for Paradise Island already created.')
                 })
-            }, 1000)
+        }, 1000)
         done()
     })
 })

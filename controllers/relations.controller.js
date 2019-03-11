@@ -1,10 +1,10 @@
 const { Relation } = require('./../db/sequelize')
 
 var createRelations = async (org, parentName = null) => {
-    const organization = await Relation.findOne({ 
+    const organization = await Relation.findOne({
         where: {
             source: org.org_name
-        } 
+        }
     })
 
     if (organization)

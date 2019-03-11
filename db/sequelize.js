@@ -19,7 +19,7 @@ Relation.createSisterRelationships = async (orgName, parent) => {
     const sisters = await Relation.findAll({
         raw: true,
         where: {
-            source: { $not: orgName},
+            source: { $not: orgName },
             related: parent,
             relationship_type: "parent"
         }
@@ -42,7 +42,7 @@ Relation.createSisterRelationships = async (orgName, parent) => {
 }
 
 Relation.getRelations = async (orgName, page = 1, pageSize = 100) => {
-	var offset = pageSize * (page - 1)
+    var offset = pageSize * (page - 1)
 
     const relations = await Relation.findAll({
         raw: true,
@@ -53,7 +53,7 @@ Relation.getRelations = async (orgName, page = 1, pageSize = 100) => {
             }
         },
         attributes: [
-            [sequelize.fn('DISTINCT', sequelize.col('related')), 'org_name'], 
+            [sequelize.fn('DISTINCT', sequelize.col('related')), 'org_name'],
             'relationship_type'
         ],
         limit: parseInt(pageSize),
@@ -67,6 +67,6 @@ Relation.getRelations = async (orgName, page = 1, pageSize = 100) => {
 }
 
 sequelize.sync({ force: false })
-    .then(() => {})
+    .then(() => { })
 
 module.exports = { Relation }

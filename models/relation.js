@@ -9,12 +9,12 @@ module.exports = (sequelize, type) => {
         related: type.STRING,
         relationship_type: type.STRING
     }, {
-        indexes: [{
-            name: 'source_index',
-            fields: ['source']
-        }, {
-            name: 'related_type',
-            fields: ['related', 'relationship_type']
-        }]    
-    })
+            indexes: [{
+                name: 'source_index',
+                fields: ['source']
+            }, {
+                name: 'related_type',
+                fields: ['related', 'relationship_type']
+            }]
+        })
 }
